@@ -1,0 +1,1 @@
+[{"week_number":0,"week_year":2024,"monday":[{"name":"vcvxcvx","desc":"cvcx","start_time":43440,"duration":45900,"end_time":89340}],"tuesday":[],"wednesday":[],"thursday":[],"friday":[],"saturday":[],"sunday":[]}]
