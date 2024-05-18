@@ -1,7 +1,159 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+#root {
+  text-align: center;
+  width: 100%;
+  height: 103.5%;
+  overflow: hidden;
+  background-color: #1a1e21;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
+.main {
+  margin-top: 1rem;
+  height: 100%;
+  overflow: hidden;
+  background-color: #1a1e21;
+}
+
+.list > * {
+  display: flex;
+}
+
+.list {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  overflow-y: scroll;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: normal;
+  height: 95%;
+  width: 30%;
+  background-color: #1a1e21;
+}
+
+.work {
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  display: flex;
+  justify-content: center;
+  width: 80%;
+  height: 15rem;
+  flex-flow: wrap;
+  align-content: normal;
+
+  background-color: #212529;
+
+  border: none;
+  border-radius: 10px;
+}
+
+.name {
+  display: flex;
+  width: 100%;
+
+  height: 3rem;
+  width: 90%;
+  align-items: center;
+  margin-top: 1vh;
+
+  background-color: #292e33;
+
+  border: none;
+  border-radius: 10px;
+}
+
+.name:hover .nameSpan {
+  max-width: 75%;
+}
+.name:hover .editSpan {
+  visibility: visible;
+}
+
+.nameSpan {
+  transition: max-width 0.3s ease;
+
+  max-width: 100%;
+
+  overflow-x: scroll;
+  margin-left: 1vh;
+}
+
+.editSpan {
+  visibility: hidden;
+  margin-right: 1vh;
+  cursor: pointer;
+}
+
+.divider {
+  display: flex;
+  width: 90%;
+  height: 1rem;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #292e33;
+
+  border: none;
+  border-radius: 25px;
+}
+.dividerLine {
+  max-width: 100%;
+  background-color: #ffc300;
+  height: 1rem;
+
+  border: none;
+  border-radius: 25px;
+}
+
+.details {
+  display: flex;
+  height: 8rem;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #292e33;
+
+  border: none;
+  border-radius: 10px;
+}
+
+.detailsSpan {
+  width: 100%;
+  height: 90%;
+}
+
+.textArea {
+  max-width: 90%;
+  max-height: 90%;
+  width: 90%;
+  height: 90%;
+  font-size: 2rem;
+
+  padding: 1em;
+
+  background-color: #343a40;
+
+  border: none;
+  border-radius: 10px;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.controls {
+  display: flex;
+  position: absolute;
+  right: 2rem;
+  bottom: 1rem;
+
+  width: 10rem;
+
+  justify-content: space-between;
+}
+
+.nameLabel {
+  margin-left: 1vh;
 }
