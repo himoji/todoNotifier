@@ -31,7 +31,7 @@ const Work: React.FC<WorkProps> = ({ progress, details, name }) => {
                     className="dividerLine"
                     title={`Progress: ${progress}`}
                     style={{
-                        width: progress,
+                        width: `${progress}%`,
                     }}
                 ></div>
             </div>
