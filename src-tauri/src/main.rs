@@ -6,7 +6,7 @@ use crate::work::Work;
 
 mod work;
 mod file_work;
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TauriWork {
     pub work: Work, // nice inheritance
     pub progress: u8,
@@ -83,9 +83,15 @@ fn get_works() -> Result<Vec<TauriWork>, String> {
     Ok(works)
 }
 
+
+#[tauri::command(rename_all = "snake_case")]
+fn set_works(works: Vec<TauriWork>)  {
+    dbg!(works);
+}
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_works])
+        .invoke_handler(tauri::generate_handler![get_works, set_works])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

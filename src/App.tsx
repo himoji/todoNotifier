@@ -39,6 +39,14 @@ function App() {
         }
     };
 
+    const InvokeSetWorks = async () => {
+        try {
+            await invoke("set_works", {works: works});
+        } catch (err) {
+            console.error("Error setting works:", err);
+        }
+    };
+
     useEffect(() => {
         fetchWorks();
     }, []);
@@ -66,7 +74,6 @@ function App() {
                     {works.map((work: TauriWork, index: number) => (
                         <div
                             onClick = {() => {console.log(selectedWork);setSelectedWork(works[index]);}}
-
                         >
                             <Work
                                 key={index}
@@ -95,7 +102,7 @@ function App() {
         </div>
 
     <div className="controls">
-        <button>Save</button>
+        <button onClick={() => InvokeSetWorks()}>Save</button>
         <button>Reset</button>
     </div>
         </>
