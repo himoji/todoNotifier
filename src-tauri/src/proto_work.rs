@@ -56,12 +56,16 @@ pub async fn get_all_works(
     let mut works: Vec<Work> = Vec::new();
 
     for proto_work in response.get_ref().clone().works {
+        dbg!(proto_work.clone());
+
         works.push(Work::from(
             proto_work.name,
             proto_work.desc,
-            proto_work.date_end,
             proto_work.date_start,
+            proto_work.date_end,
+            proto_work.index,
         ));
+
     }
     dbg!(response);
 

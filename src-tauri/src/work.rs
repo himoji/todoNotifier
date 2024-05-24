@@ -25,6 +25,7 @@ pub struct Work {
     pub desc: String,
     pub date_start: i64,
     pub date_end: i64,
+    pub index: String,
 }
 
 impl Work {
@@ -36,15 +37,17 @@ impl Work {
             desc: "".to_string(),
             date_start: 0,
             date_end: 0,
+            index: "".to_string(),
         }
     }
-    pub fn from(name: String, desc: String, date_start: i64, date_end: i64) -> Work {
+    pub fn from(name: String, desc: String, date_start: i64, date_end: i64, index: String) -> Work {
         //!Creates work with specified params
         Work {
             name,
             desc,
             date_start,
             date_end,
+            index,
         }
     }
 
@@ -105,6 +108,7 @@ impl Work {
                 desc,
                 date_start,
                 date_end,
+                index: "".to_string(),
             })
         }
     }

@@ -35,10 +35,12 @@
   margin-bottom: 2vh;
   display: flex;
   justify-content: center;
-  width: 80%;
+  width: 10rem;
   height: 15rem;
   flex-flow: wrap;
   align-content: normal;
+
+  min-width: 10rem;
 
   background-color: #212529;
 
@@ -48,8 +50,6 @@
 
 .name {
   display: flex;
-  width: 100%;
-
   height: 3rem;
   width: 90%;
   align-items: center;
@@ -123,9 +123,9 @@
 }
 
 .textArea {
-  max-width: 90%;
-  max-height: 90%;
-  width: 90%;
+  max-width: 99%;
+  max-height: 81%;
+  width: 107%;
   height: 88%;
   font-size: 2rem;
 
@@ -146,8 +146,8 @@
 .controls {
   display: flex;
   position: absolute;
-  right: 2rem;
   bottom: 1rem;
+  right: 5rem;
 
   width: 10rem;
 

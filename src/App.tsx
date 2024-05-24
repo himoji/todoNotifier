@@ -8,7 +8,8 @@ function App() {
         name: "Sample Work",
         desc: "This is a description",
         date_start: 12331,
-        date_end: 321244
+        date_end: 321244,
+        index: "a"
     };
 
     type Work = {
@@ -16,6 +17,7 @@ function App() {
         desc: string;
         date_start: number;
         date_end: number;
+        index: string
     };
 
 
@@ -49,12 +51,20 @@ function App() {
         const newDesc = event.target.value;
         const updatedWork = { ...selectedWork, desc: newDesc };
         setSelectedWork(updatedWork);
-        console.log('Updated selectedWork:', updatedWork);
+
+    };
+
+    const HandleResetButton = () => {
+        const updatedWork = { ...selectedWork, desc: "" };
+        setSelectedWork(updatedWork);
 
     };
 
     const getProgress = (work: Work): number => {
-        const now = new Date().getTime();
+        let date = new Date();
+        let now = Math.ceil(date.getTime()/1000);
+
+        console.log(now);
 
         const startTime = work.date_start;
         const endTime = work.date_end;
@@ -71,7 +81,7 @@ function App() {
             return 100;
         }
 
-        return ((now - startTime) / (endTime - startTime)) * 100;
+        return Math.ceil(((now - startTime) / (endTime - startTime)) * 100);
     };
 
     return (
@@ -85,13 +95,13 @@ function App() {
                 <div className="list">
                     {works.map((work: Work, index: number) => (
                         <div
-                            onClick = {() => {console.log(selectedWork);setSelectedWork(works[index]);}}
+                            onClick = {() => {setSelectedWork(works[index]);console.log(selectedWork)}}
                         >
                             <Work
-                                key={index}
+                                key={work.index}
                                 name={work.name}
                                 details={work.desc}
-                                progress={`${() => getProgress(work)}`}
+                                progress={`${getProgress(work)}`}
                             />
                         </div>
                     ))}
@@ -113,10 +123,11 @@ function App() {
             </div>
         </div>
 
-    <div className="controls">
-        <button onClick={() => InvokeSetWorks()}>Save</button>
-        <button>Reset</button>
-    </div>
+            <div className="controls">
+                <button onClick={() => InvokeSetWorks()}>Save</button>
+                <button onClick={() => HandleResetButton()}>Reset</button>
+                <button onClick={() => fetchWorks()}>Sync</button>
+            </div>
         </>
     );
 }
