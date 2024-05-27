@@ -1,27 +1,26 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import Work from "./Work.tsx";
-import { invoke } from "@tauri-apps/api";
+import Work from "./Work";
+import { invoke } from "@tauri-apps/api/tauri";
+
+type Work = {
+    name: string;
+    desc: string;
+    date_start: number;
+    date_end: number;
+    index: string;
+};
+
+const initialWork: Work = {
+    name: "Sample Work",
+    desc: "This is a description",
+    date_start: 12331,
+    date_end: 321244,
+    index: "a",
+};
 
 function App() {
-    const initialWork: Work = {
-        name: "Sample Work",
-        desc: "This is a description",
-        date_start: 12331,
-        date_end: 321244,
-        index: "a"
-    };
-
-    type Work = {
-        name: string;
-        desc: string;
-        date_start: number;
-        date_end: number;
-        index: string
-    };
-
-
-    const [works, setWorks] = useState<Work[]>([])
+    const [works, setWorks] = useState<Work[]>([]);
     const [selectedWork, setSelectedWork] = useState<Work>(initialWork);
 
     const fetchWorks = async () => {
@@ -35,9 +34,13 @@ function App() {
 
     const InvokeSetWorks = async () => {
         try {
-            const updatedWorks = [...works, selectedWork];
+            // Update the work in the works array
+            const updatedWorks = works.map(work =>
+                work.index === selectedWork.index ? selectedWork : work
+            );
 
             await invoke("set_works_sync", { works: updatedWorks });
+            setWorks(updatedWorks); // Update the local state with the updated works
         } catch (err) {
             console.error("Error setting works:", err);
         }
@@ -52,20 +55,20 @@ function App() {
         const updatedWork = { ...selectedWork, desc: newDesc };
         setSelectedWork(updatedWork);
 
+        // Update the work in the works array
+        setWorks(works.map(work => work.index === updatedWork.index ? updatedWork : work));
     };
 
     const HandleResetButton = () => {
         const updatedWork = { ...selectedWork, desc: "" };
         setSelectedWork(updatedWork);
 
+        // Update the work in the works array
+        setWorks(works.map(work => work.index === updatedWork.index ? updatedWork : work));
     };
 
     const getProgress = (work: Work): number => {
-        let date = new Date();
-        let now = Math.ceil(date.getTime()/1000);
-
-        console.log(now);
-
+        const now = Math.ceil(Date.now() / 1000);
         const startTime = work.date_start;
         const endTime = work.date_end;
 
@@ -86,19 +89,11 @@ function App() {
 
     return (
         <>
-            <div
-                className="main"
-                style={{
-                    display: "flex",
-                }}
-            >
+            <div className="main" style={{ display: "flex" }}>
                 <div className="list">
-                    {works.map((work: Work, index: number) => (
-                        <div
-                            onClick = {() => {setSelectedWork(works[index]);console.log(selectedWork)}}
-                        >
+                    {works.map((work) => (
+                        <div key={work.index} onClick={() => setSelectedWork(work)}>
                             <Work
-                                key={work.index}
                                 name={work.name}
                                 details={work.desc}
                                 progress={`${getProgress(work)}`}
@@ -106,27 +101,20 @@ function App() {
                         </div>
                     ))}
                 </div>
-                <div
-                    className="body"
-                    style={{
-                        height: "100%",
-                    }}
-                >
-          <textarea
-              name="description"
-              id="description"
-              className="textArea"
-              value={selectedWork.desc}
-              onChange={handleDescChange}
-          >
-                </textarea>
+                <div className="body" style={{ height: "100%" }}>
+                    <textarea
+                        name="description"
+                        id="description"
+                        className="textArea"
+                        value={selectedWork.desc}
+                        onChange={handleDescChange}
+                    />
+                </div>
             </div>
-        </div>
-
             <div className="controls">
-                <button onClick={() => InvokeSetWorks()}>Save</button>
-                <button onClick={() => HandleResetButton()}>Reset</button>
-                <button onClick={() => fetchWorks()}>Sync</button>
+                <button onClick={InvokeSetWorks}>Save</button>
+                <button onClick={HandleResetButton}>Reset</button>
+                <button onClick={fetchWorks}>Sync</button>
             </div>
         </>
     );

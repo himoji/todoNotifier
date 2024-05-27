@@ -44,3 +44,24 @@ pub fn set_works_sync(works: Vec<Work>) -> Result<(), String> {
         })
     })
 }
+
+#[tauri::command(rename_all = "snake_case")]
+async fn edit_work(works: Vec<Work>) -> Result<(), Box<dyn Error>> {
+    let url = "http2://[::1]:50051"; // Assuming the server uses http2
+    let mut client = DbApiClient::connect(url).await.expect("sda");
+
+    for work in works {
+        add_work(&mut client, work).await?;
+    }
+
+    Ok(())
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub fn edit_work_sync(works: Vec<Work>) -> Result<(), String> {
+    tokio::task::block_in_place(|| {
+        tokio::runtime::Runtime::new().unwrap().block_on(async {
+            crate::sync_work::set_works(works).await.map_err(|e| e.to_string())
+        })
+    })
+}

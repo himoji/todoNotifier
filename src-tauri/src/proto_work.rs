@@ -7,10 +7,7 @@ use crate::proto;
 use crate::proto::db_api_client::DbApiClient;
 use crate::work::Work;
 
-pub async fn add_work(
-    client: &mut DbApiClient<Channel>,
-    work: Work,
-) -> tonic::Result<String, Box<dyn Error>> {
+pub async fn add_work(client: &mut DbApiClient<Channel>, work: Work) -> tonic::Result<String, Box<dyn Error>> {
     let req = proto::ProtoWork {
         name: work.name,
         desc: work.desc,
@@ -31,6 +28,7 @@ pub async fn get_work(
     client: &mut DbApiClient<Channel>,
     index: String,
 ) -> tonic::Result<Work, Box<dyn Error>> {
+    let i = index.clone();
     let req = proto::ProtoWorkIndex { index };
 
     let request = Request::new(req);
@@ -40,7 +38,7 @@ pub async fn get_work(
     let resp = response.get_ref().clone();
 
     dbg!(resp.clone());
-    let work = Work::from(resp.name, resp.desc, resp.date_start, resp.date_end);
+    let work = Work::from(resp.name, resp.desc, resp.date_start, resp.date_end, i);
 
     Ok(work)
 }
