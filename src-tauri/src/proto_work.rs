@@ -5,9 +5,9 @@ use tonic::transport::Channel;
 
 use crate::proto;
 use crate::proto::db_api_client::DbApiClient;
-use crate::work::Work;
+use crate::work::{Work, WorkParams};
 
-pub async fn add_work(client: &mut DbApiClient<Channel>, work: Work) -> tonic::Result<String, Box<dyn Error>> {
+pub async fn proto_add_work(client: &mut DbApiClient<Channel>, work: Work) -> tonic::Result<String, Box<dyn Error>> {
     let req = proto::ProtoWork {
         name: work.name,
         desc: work.desc,
@@ -15,7 +15,8 @@ pub async fn add_work(client: &mut DbApiClient<Channel>, work: Work) -> tonic::R
         date_end: work.date_end,
     };
 
-    let request = Request::new(req);
+    let request
+        = Request::new(req);
 
     let response = client.add_work(request).await?;
 
@@ -24,7 +25,7 @@ pub async fn add_work(client: &mut DbApiClient<Channel>, work: Work) -> tonic::R
     Ok(response.into_inner().index)
 }
 
-pub async fn get_work(
+pub async fn proto_get_work(
     client: &mut DbApiClient<Channel>,
     index: String,
 ) -> tonic::Result<Work, Box<dyn Error>> {
@@ -43,7 +44,7 @@ pub async fn get_work(
     Ok(work)
 }
 
-pub async fn get_all_works(
+pub async fn proto_get_all_works(
     client: &mut DbApiClient<Channel>,
 ) -> tonic::Result<Vec<Work>, Box<dyn Error>> {
     let req = proto::Empty {};
@@ -68,4 +69,53 @@ pub async fn get_all_works(
     dbg!(response);
 
     Ok(works)
+}
+
+pub async fn proto_edit_work(client: &mut DbApiClient<Channel>, index: String, param: WorkParams) -> tonic::Result<Work, Box<dyn Error>> {
+    let enums = match param {
+        WorkParams::Name(name) => {
+            proto::ProtoWorkParam {
+                index: index.clone(),
+                r#enum: 0,
+                value: name
+            }
+        }
+        WorkParams::Desc(desc) => {
+            proto::ProtoWorkParam {
+                index: index.clone(),
+                r#enum: 1,
+                value: desc
+            }
+
+        }
+        WorkParams::DateStart(date_start) => {
+            proto::ProtoWorkParam {
+                index: index.clone(),
+                r#enum: 2,
+                value: date_start.to_string()
+            }
+        }
+        WorkParams::DateEnd(date_end) => {
+            proto::ProtoWorkParam {
+                index: index.clone(),
+                r#enum: 3,
+                value: date_end.to_string()
+            }
+        }
+    };
+
+    let request = Request::new(enums);
+
+    let response = client.edit_work(request).await?;
+    let resp = response.get_ref().clone();
+
+    dbg!(&resp);
+
+    Ok(Work::from(
+        resp.name,
+        resp.desc,
+        resp.date_start,
+        resp.date_end,
+        index.clone()
+    ))
 }

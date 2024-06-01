@@ -115,6 +115,9 @@
 
   border: none;
   border-radius: 10px;
+
+  word-break: break-word;
+  overflow-y: hidden;
 }
 
 .detailsSpan {

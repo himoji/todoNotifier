@@ -3,7 +3,7 @@
 
 use std::error::Error;
 use serde::{Deserialize, Serialize};
-use crate::sync_work::{get_works_sync, set_works_sync};
+use crate::sync_work::{get_works_sync, set_works_sync, edit_work_sync};
 
 mod work;
 // Remove unused modules if you don't need them
@@ -29,7 +29,7 @@ fn greet(name: &str) -> String {
 
 fn main() -> Result<(), Box<dyn Error>> {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_works_sync, set_works_sync])
+        .invoke_handler(tauri::generate_handler![get_works_sync, set_works_sync, edit_work_sync])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 
